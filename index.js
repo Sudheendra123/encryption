@@ -11,17 +11,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-app.get('/admin', (req, res)=>{
-    res.sendFile(__dirname+'/admin.html');
-})
-app.post('/admin/encrypt', (req, res) => {
+// app.get('/admin', (req, res)=>{
+//     res.sendFile(__dirname+'/admin.html');
+// })
+app.post('/encrypt', (req, res) => {
   const phoneNumber = req.body.phoneNumber;
-  res.send(`Encrypted Phone Number: ${encodePhoneNumber(phoneNumber)}`);
-});
+  sendWhatsAppMessage(phoneNumber, `OTP Sent Successfully! ${encodePhoneNumber(phoneNumber)}`)
+  //res.send(`Encrypted Phone Number: ${encodePhoneNumber(phoneNumber)}`);
+  res.sendFile(__dirname + '/admin.html')
+
+
+})
 
 app.post('/decrypt', (req, res) => {
-  const encryptedPhoneNumber = req.body.encryptedPhoneNumber;
-  res.send(`Package is successfully delivered ${decodePhoneNumber(encryptedPhoneNumber)}`);
+  const encryptedPhoneNumber = req.body.phoneNumber;
+//   sendWhatsAppMessage(encryptedPhoneNumber, `Package is successfully delivered! ${decodePhoneNumber(encryptedPhoneNumber)}`)
+  res.send(`Package is successfully delivered!`);
 });
 
 app.listen(port, () => {
@@ -61,16 +66,18 @@ function decodePhoneNumber(encodedNumber) {
     const key = new Date().getDate(); 
     const shiftedNumber = base36Decode(encodedNumber);
     const originalNumber = (shiftedNumber - key + 10000000000) % 10000000000;
+
     const decodedNumber = originalNumber.toString().padStart(10, '0');
-    sendWhatsAppMessage(decodedNumber, "Package Delivered Successfully!")
-    return decodedNumber
+    console.log("decodedNumber", decodedNumber)
+    sendWhatsAppMessage(decodedNumber, "Package Delivered Successfully!");
+    // return decodedNumber
 }
 
 const twilio = require('twilio');
 
 // Your Twilio account SID and Auth Token
-const accountSid = '#############################';
-const authToken = '##############################';
+const accountSid = 'AC108f2debc6e7bff2b856c497a607c88a';
+const authToken = '88254e223910cf33c957b3b0ef2c73b8';
 
 const client = new twilio(accountSid, authToken);
 
