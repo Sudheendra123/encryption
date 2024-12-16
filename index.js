@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const CryptoJS = require('crypto-js');
+const twilio = require('twilio');
 
 const app = express();
 const port = 3000;
@@ -11,9 +12,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
 app.get('/admin', (req, res)=>{
     res.sendFile(__dirname+'/admin.html');
 })
+
 app.post('/admin/encrypt', (req, res) => {
   const phoneNumber = req.body.phoneNumber;
   res.send(`Encrypted Phone Number: ${encodePhoneNumber(phoneNumber)}`);
@@ -27,7 +30,6 @@ app.post('/decrypt', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-
 
 const base36Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -66,23 +68,22 @@ function decodePhoneNumber(encodedNumber) {
     return decodedNumber
 }
 
-const twilio = require('twilio');
+
 
 // Your Twilio account SID and Auth Token
-const accountSid = 'AC108f2debc6e7bff2b856c497a607c88a';
-const authToken = '178b26f2bcc280a4f5562f526a4217ac';
+const accountSid = '&&&&&&&&&&';
+const authToken = '&&&&&&&&&&';
 
-// Create a Twilio client
+
 const client = new twilio(accountSid, authToken);
 
-// Function to send a WhatsApp message
 function sendWhatsAppMessage(to, message) {
     client.messages.create({
         body: message,
-        from: '+12526181343', // Your Twilio WhatsApp-enabled number
+        from: '+######', 
         to: `+91${to}`
     })
     .then(message => console.log("Message sent", message))
-    .catch(error => console.error("Error", error)); // Added a comma and corrected syntax
+    .catch(error => console.error("Error", error)); 
 }
 
