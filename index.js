@@ -71,8 +71,8 @@ function decodePhoneNumber(encodedNumber) {
 
 
 // Your Twilio account SID and Auth Token
-const accountSid = '&&&&&&&&&&';
-const authToken = '&&&&&&&&&&';
+const accountSid = ''
+const authToken = ''
 
 
 const client = new twilio(accountSid, authToken);
